@@ -1,23 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/sign.dart';
-
 import 'components/container_text_field.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'home_page.dart';
 
 class Login extends StatefulWidget {
   const Login({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController login = TextEditingController();
+  TextEditingController pass = TextEditingController();
 
-  TextEditingController login=TextEditingController();
-  TextEditingController pass=TextEditingController();
+  FocusNode loginFocus = FocusNode();
+  FocusNode passFocus = FocusNode();
 
-   @override
+
+  Future<void> _handleLogin() async {
+  String loginValue = login.text;
+  String passwordValue = pass.text;
+
+  if (loginValue.isEmpty || passwordValue.isEmpty) {
+    print("Please fill in both fields");
+    return;
+  }
+
+  try {
+    String uri = "http://10.0.2.2/rest_api/login.php";
+    var res = await http.post(Uri.parse(uri), body: {
+      "login": loginValue,
+      "password": passwordValue,
+    });
+
+    if (res.statusCode == 200) {
+      var response = jsonDecode(res.body);
+      if (response["success"] == true) {
+        // Je?li logowanie si? powiedzie, przekieruj na stron? "homepage"
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        print("Invalid login or password");
+        pass.clear();
+
+        // Wy?wietl snackbar z wiadomo?ci? o b??dnych danych logowania
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Invalid login or password"),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } else {
+      print("Network error: ${res.statusCode}");
+    }
+  } catch (e) {
+    print("An error occurred: $e");
+  }
+}
+
+
+  @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -36,6 +88,7 @@ class _LoginState extends State<Login> {
                   child: ContainerTextField(
                     labelName: "Login",
                     isPassword: false,
+                    controller: login,
                   ),
                 ),
                 Padding(
@@ -43,13 +96,13 @@ class _LoginState extends State<Login> {
                   child: ContainerTextField(
                     labelName: "Password",
                     isPassword: true,
-                  )
-                ),
-
-                ElevatedButton(
-                  onPressed: (){}, 
-                  child: Text("Log In")
+                    controller: pass,
                   ),
+                ),
+                ElevatedButton(
+                  onPressed: _handleLogin,
+                  child: Text("Log In"),
+                ),
               ],
             ),
             Stack(
@@ -59,7 +112,6 @@ class _LoginState extends State<Login> {
                   left: 5,
                   child: GestureDetector(
                     onTap: () {
-                      // Przejd? do ekranu SignIn po klikni?ciu w CircleAvatar
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -75,30 +127,29 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
-             Positioned(
+            Positioned(
               top: 55,
               child: Column(
                 children: [
-                   InkWell(
-              onTap: () =>  Navigator.push(
-                context, MaterialPageRoute(builder: (context )=> SignUp())),
-                     child: const Text(
-                      "Log In", 
+                  InkWell(
+                    onTap: () => Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => SignUp())),
+                    child: const Text(
+                      "Log In",
                       style: TextStyle(
-                        fontSize: 50, 
+                        fontSize: 50,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white
+                        color: Colors.white,
                       ),
-                                     ),
-                   ),
-                  Text("Tap the circle to Sign up")
+                    ),
+                  ),
+                  Text("Tap the circle to Sign up"),
                 ],
               ),
-             ),
+            ),
           ],
         ),
       ),
     );
   }
 }
-

@@ -6,6 +6,8 @@ import 'package:flutter_x_database/pages/components/container_text_field.dart';
 import 'package:flutter_x_database/pages/login.dart';
 import 'package:http/http.dart' as http;
 
+import 'home_page.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({
     super.key,
@@ -21,29 +23,33 @@ class _SignUpState extends State<SignUp> {
   TextEditingController pass = TextEditingController();
 
   Future<void> insertLoginData() async {
-    if (login.text != "" || pass.text != "") {
-      try {
-        String uri = "http://10.0.2.2/rest_api/login.php";
-        var res = await http.post(Uri.parse(uri), body: {
-          "login": login.text,
-          "password": pass.text, // Warto?? 'password' musi odpowiada? nazwie pola w bazie danych
-        });
+  if (login.text != "" || pass.text != "") {
+    try {
+      String uri = "http://10.0.2.2/rest_api/signup.php";
+      var res = await http.post(Uri.parse(uri), body: {
+        "login": login.text,
+        "password": pass.text, 
+      });
 
-        print("Response Body: ${res.body}");
+      print("Response Body: ${res.body}");
 
-        var response = jsonDecode(res.body);
-        if (response["success"] == "true") {
-          print("You are Signed Up");
-        } else {
-          print("You have got some issues");
-        }
-      } catch (e) {
-        print(e);
+      var response = jsonDecode(res.body);
+      if (response["success"] == "true") {
+         Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Login()),
+          );
+        print("You are Signed Up");
+      } else {
+        print(response["message"]);
       }
-    } else {
-      print("Please fill all fields");
+    } catch (e) {
+      print(e);
     }
+  } else {
+    print("Please fill all fields");
   }
+}
 
   @override
   Widget build(BuildContext context) {
