@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wy?wietlanie bazy danych</title>
+    <style>
+        /* Twoje style CSS */
+    </style>
+</head>
+<body>
+    <h1>Dane z bazy danych:</h1>
+    <div id="data"></div>
+
+    <script>
+        fetch('config.php')
+            .then(response => response.json())
+            .then(data => {
+                const dataContainer = document.getElementById('data');
+                data.forEach(item => {
+                    const row = document.createElement('p');
+                    row.textContent = `ID: ${item.id}, username: ${item.username}, password: ${item.password}`;
+                    dataContainer.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Blad pobierania danych:', error);
+            });
+    </script>
+</body>
+</html>
