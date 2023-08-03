@@ -63,6 +63,7 @@ class _SignUpState extends State<SignUp> {
                  Padding(
                   padding:  EdgeInsets.all(10.0),
                   child: ContainerTextField(
+                    isPassword: false,
                     labelName: "Login",
                     controller: login,
                   ),
@@ -70,6 +71,7 @@ class _SignUpState extends State<SignUp> {
                  Padding(
                   padding:  EdgeInsets.all(10.0),
                   child: ContainerTextField(
+                    isPassword: true,
                     labelName: "Password",
                     controller: pass,
                   ),

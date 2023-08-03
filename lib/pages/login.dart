@@ -35,14 +35,14 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.all(10.0),
                   child: ContainerTextField(
                     labelName: "Login",
-                    
+                    isPassword: false,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ContainerTextField(
                     labelName: "Password",
-                    
+                    isPassword: true,
                   )
                 ),
 

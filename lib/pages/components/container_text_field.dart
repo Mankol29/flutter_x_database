@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class ContainerTextField extends StatelessWidget {
   final String labelName;
   final TextEditingController? controller;
+  final bool isPassword;
 
   const ContainerTextField({
     Key? key,
     required this.labelName, 
     this.controller,
+     required this.isPassword,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class ContainerTextField extends StatelessWidget {
       height: 70,
       child: TextField(
         controller: controller,
+        obscureText: isPassword,
         textAlign: TextAlign.center, // Wy?rodkowanie tekstu wewn?trz TextField
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
