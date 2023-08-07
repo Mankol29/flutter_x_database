@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_x_database/pages/admin%20folder/EditUserPage.dart';
 import 'package:flutter_x_database/pages/admin%20folder/UserRoleAdd.dart';
 import 'package:flutter_x_database/pages/login.dart';
 
@@ -21,6 +22,14 @@ class HomePage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserRoleAdd()),
+                ),
+              ),
+              SizedBox(height: 20),
+              GestureDetector(
+                child: const Text("Kliknij aby zmienic uprawnienia uzytkownikow"),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditUserPage()),
                 ),
               ),
               if(userRole != "Administrator")
