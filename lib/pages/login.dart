@@ -1,9 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/sign.dart';
 import 'components/container_text_field.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'home_page.dart';
 
 class Login extends StatefulWidget {
@@ -19,52 +20,66 @@ class _LoginState extends State<Login> {
   TextEditingController login = TextEditingController();
   TextEditingController pass = TextEditingController();
 
-  FocusNode loginFocus = FocusNode();
-  FocusNode passFocus = FocusNode();
-
-
   Future<void> _handleLogin() async {
-  String loginValue = login.text;
-  String passwordValue = pass.text;
+    String loginValue = login.text;
+    String passwordValue = pass.text;
 
-  if (loginValue.isEmpty || passwordValue.isEmpty) {
-    print("Please fill in both fields");
-    return;
+    if (loginValue.isEmpty || passwordValue.isEmpty) {
+      print("Please fill in both fields");
+      return;
+    }
+
+    try {
+      String uri = "http://10.0.2.2/rest_api/login.php";
+      var res = await http.post(Uri.parse(uri), body: {
+        "login": loginValue,
+        "password": passwordValue,
+      });
+
+      if (res.statusCode == 200) {
+        var response = jsonDecode(res.body);
+        if (response["success"] == true) {
+          String userRole = await _getUserRoleFromServer(loginValue);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage(userRole: userRole)),
+          );
+        } else {
+          print("Invalid login or password");
+          pass.clear();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Invalid login or password"),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      } else {
+        print("Connection error: ${res.statusCode}");
+      }
+    } catch (e) {
+      print("An error occurred: $e");
+    }
   }
 
+  Future<String> _getUserRoleFromServer(String login) async {
   try {
-    String uri = "http://10.0.2.2/rest_api/login.php";
-    var res = await http.post(Uri.parse(uri), body: {
-      "login": loginValue,
-      "password": passwordValue,
-    });
+    String uri = "http://10.0.2.2/rest_api/get_user_role.php?login=$login";
+    var res = await http.get(Uri.parse(uri));
 
     if (res.statusCode == 200) {
       var response = jsonDecode(res.body);
-      if (response["success"] == true) {
-        // Je?li logowanie si? powiedzie, przekieruj na stron? "homepage"
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      } else {
-        print("Invalid login or password");
-        pass.clear();
-
-        // Wy?wietl snackbar z wiadomo?ci? o b??dnych danych logowania
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Invalid login or password"),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
+      return response["role"];
     } else {
-      print("Network error: ${res.statusCode}");
+      print("Error getting user role");
+      return "";
     }
   } catch (e) {
     print("An error occurred: $e");
+    return "";
   }
 }
 

@@ -1,4 +1,6 @@
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_x_database/pages/components/container_text_field.dart';
 import 'package:flutter_x_database/pages/login.dart';
 import 'package:http/http.dart' as http;
 
-import 'home_page.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({
@@ -35,10 +36,36 @@ class _SignUpState extends State<SignUp> {
 
       var response = jsonDecode(res.body);
       if (response["success"] == "true") {
-         Navigator.push(
+          showDialog(
+  context: context,
+  builder: (context) => AlertDialog(
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(); //Zamknij okno dialogowe
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Login()),
+            MaterialPageRoute(builder: (context) => Login()), // przejdz do ekranu logowania
           );
+        },
+        child: const Text("Close"),
+      ),
+    ],
+    title: const Text(
+      "You have successfully signed up",
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    content: const Text(
+      "Now you can Log in",
+      style: TextStyle(
+        fontSize: 20,
+      ),
+    ),
+  ),
+);
+
         print("You are Signed Up");
       } else {
         print(response["message"]);
