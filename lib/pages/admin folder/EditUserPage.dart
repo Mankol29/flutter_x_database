@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_key_in_widget_constructors, library_private_types_in_public_api, avoid_print, use_build_context_synchronously, prefer_const_constructors
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +49,7 @@ class _EditUserPageState extends State<EditUserPage> {
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Users")),
+      appBar: AppBar(title: const Text("Edit Users")),
       body: ListView.builder(
         itemCount: userDataList.length,
         itemBuilder: (context, index) {
@@ -59,7 +61,7 @@ class _EditUserPageState extends State<EditUserPage> {
                 // Open edit dialog when button is pressed
                 _showEditDialog(userDataList[index]);
               },
-              child: Text("Edit"),
+              child: const Text("Edit"),
             ),
           );
         },

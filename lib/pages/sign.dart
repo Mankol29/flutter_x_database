@@ -1,5 +1,5 @@
 
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print, prefer_const_constructors
 
 import 'dart:convert';
 
@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/components/container_text_field.dart';
 import 'package:flutter_x_database/pages/login.dart';
 import 'package:http/http.dart' as http;
+
+import 'admin folder/admin features/alert_login_exists.dart';
 
 
 class SignUp extends StatefulWidget {
@@ -68,6 +70,14 @@ class _SignUpState extends State<SignUp> {
 
         print("You are Signed Up");
       } else {
+        
+        showDialog(
+          context: context,
+            builder: (context) => alertLogin(
+              errorTitle: " Login already exists.",
+              errorName: "Please type a different login.",
+            ));
+
         print(response["message"]);
       }
     } catch (e) {
