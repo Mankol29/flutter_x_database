@@ -16,7 +16,7 @@ class _UserRoleAddState extends State<UserRoleAdd> {
 
   TextEditingController login = TextEditingController();
   TextEditingController pass = TextEditingController();
-  String selectedRole = "U?ytkownik"; // Default role
+  String selectedRole = "Uzytkownik"; // Default role
   
 
 
@@ -93,6 +93,9 @@ Future<void> saveAddRole() async {
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Add user account as Admin"),
+      ),
       body: Column(
        children:[ 
         AdminTextField(
@@ -123,7 +126,7 @@ Future<void> saveAddRole() async {
                         selectedRole = newValue!;
                       });
                     },
-                    items: <String>["Administrator", "U?ytkownik"].map((String value) {
+                    items: <String>["Administrator", "Uzytkownik"].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
