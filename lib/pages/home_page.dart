@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
           children: [
             if (userRole == "Administrator") // Sprawdzamy rol?
               GestureDetector(
-                child: const Text("Dodawanie u?ytkowników i ustawianie im roli."),
+                child: const Text("Dodawanie uzytkownikow i ustawianie im roli."),
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserRoleAdd()),
