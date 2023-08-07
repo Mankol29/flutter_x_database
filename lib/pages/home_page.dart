@@ -10,18 +10,21 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(actions: []),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (userRole == "Administrator") // Sprawdzamy rol?
               GestureDetector(
-                child: const Text("Dodawanie uzytkownikow i ustawianie im roli."),
+                child: const Text("Ten tekst jest widoczny tylko dla adminow"),
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserRoleAdd()),
                 ),
               ),
+              if(userRole != "Administrator")
+              Center(child: const Text("Ten tekst jest widoczny dla zwyklych uzytkownikow"))
           ],
         ),
       ),
