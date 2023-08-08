@@ -8,7 +8,7 @@ import 'package:flutter_x_database/pages/components/container_text_field.dart';
 import 'package:flutter_x_database/pages/login.dart';
 import 'package:http/http.dart' as http;
 
-import 'admin folder/admin features/alert_login_exists.dart';
+import 'HomePage/admin folder/admin features/alert_login_exists.dart';
 
 
 class SignUp extends StatefulWidget {
@@ -131,11 +131,11 @@ class _SignUpState extends State<SignUp> {
              Stack(
               children:[ 
                 Positioned(
-                top: (screenHeight / 1.4),// Ustaw pozycje CircleAvatar
+                top: (screenHeight / 1.4),// ustaw pozycje CircleAvatar
                 left: 5 ,
                   child: GestureDetector(
                     onTap: () {
-                      // Przejd? do ekranu SignIn po klikni?ciu w CircleAvatar
+                      // przejdz do ekranu SignIn po kliknieciu w CircleAvatar
                       Navigator.push(
                         context,
                         MaterialPageRoute(
