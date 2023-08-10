@@ -1,7 +1,8 @@
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_x_database/pages/HomePage/admin%20folder/admin%20features/table_column.dart';
+
+import '../../adminFolder/adminFeatures/table_column.dart';
 
 class CreateTableScreen extends StatefulWidget {
   @override

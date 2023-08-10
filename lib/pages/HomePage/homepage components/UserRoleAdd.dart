@@ -3,9 +3,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_x_database/pages/HomePage/admin%20folder/admin%20features/alert_login_exists.dart';
 import 'package:http/http.dart' as http;
-import '../admin folder/admin features/admin_text_field.dart';
+import '../adminFolder/adminFeatures/admin_text_field.dart';
+import '../adminFolder/adminFeatures/alert_login_exists.dart';
 
 class UserRoleAdd extends StatefulWidget {
   const UserRoleAdd({super.key});
