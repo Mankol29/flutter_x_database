@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/components/container_text_field.dart';
 import 'package:flutter_x_database/pages/login.dart';
 import 'package:http/http.dart' as http;
-
-import 'HomePage/admin folder/admin features/alert_login_exists.dart';
+import 'HomePage/adminFolder/adminFeatures/alert_login_exists.dart';
 
 
 class SignUp extends StatefulWidget {

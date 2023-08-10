@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_x_database/pages/HomePage/admin%20folder/tables_details_page.dart';
+import 'package:flutter_x_database/pages/HomePage/adminFolder/tables_details_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'admin features/add_table.dart';
-import 'admin features/table_column.dart';
+import 'adminFeatures/table_column.dart';
+import 'adminFeatures/add_table.dart';
 
 class TableListPage extends StatefulWidget {
   @override

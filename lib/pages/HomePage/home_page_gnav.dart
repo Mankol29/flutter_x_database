@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/HomePage/homepage.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'admin folder/admin features/table_list_page_gnav.dart';
+
+import 'adminFolder/adminFeatures/table_list_page_gnav.dart';
 
 
 class HomePageGnav extends StatefulWidget {

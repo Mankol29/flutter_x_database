@@ -3,7 +3,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'admin features/user_data.dart';
+
+import '../HomePage/adminFolder/adminFeatures/user_data.dart';
 
 class EditUserPage extends StatefulWidget {
   @override
