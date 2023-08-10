@@ -17,6 +17,11 @@ class _TableDetailsPageState extends State<TableDetailsPage> {
   String selectedGender = "Mezczyzna"; // Dodaj deklaracje selectedGender
   List<String> columns = [];
   List<Map<String, dynamic>> tableData = [];
+   List<String> columnTypes = ["INT", "VARCHAR(40)"];
+  
+  String newColumnName = ""; // Dodaj pole na now? nazw? kolumny
+  String newColumnType = ""; // Dodaj pole na nowy typ kolumny
+
 
   @override
   void initState() {
@@ -43,7 +48,37 @@ class _TableDetailsPageState extends State<TableDetailsPage> {
 }
 
 
+Future<void> _addColumn() async {
+  try {
+    final response = await http.post(
+  Uri.parse("http://10.0.2.2/rest_api/add_column.php"),
+  body: {
+    "table_name": widget.tableName,
+    "column_name": newColumnName,
+    "column_type": newColumnType, // Na przyk?ad "INT" lub "VARCHAR(40)"
+  },
+);
 
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      if (responseData.containsKey("message")) {
+        // Wyswietl komunikat o sukcesie
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Column added successfully")),
+        );
+        // Od?wie? dane
+        fetchTableData();
+      } else if (responseData.containsKey("error")) {
+        // Wyswietl komunikat o b??dzie
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(responseData["error"])),
+        );
+      }
+    }
+  } catch (e) {
+    print("An error occurred: $e");
+  }
+}
 
   Future<void> _insertData() async {
   final Map<String, dynamic> newData = {}; // Inicjalizuj map? dla nowych danych
@@ -304,10 +339,74 @@ Future<void> _deleteRecord(String recordId) async {
     );
   },
 ),
-     floatingActionButton: ElevatedButton(
-        onPressed: _insertData,
-        child: Text("Add Data"),
-      ),
+      floatingActionButton: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ElevatedButton(
+          onPressed: _insertData,
+          child: Text("Add Data"),
+        ),
+        SizedBox(height: 10),
+
+ElevatedButton(
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Add Column"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    newColumnName = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: "Column Name"),
+              ),
+              SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                value: newColumnType.isNotEmpty ? newColumnType : columnTypes[0], // Ustaw domy?ln? warto?? z listy
+                onChanged: (newValue) {
+                  setState(() {
+                    newColumnType = newValue!;
+                  });
+                },
+                items: columnTypes.map<DropdownMenuItem<String>>(
+                  (String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  },
+                ).toList(),
+                decoration: InputDecoration(labelText: "Column Type"),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                _addColumn(); // Dodaj now? kolumn?
+              },
+              child: Text("Add Column"),
+            ),
+          ],
+        );
+      },
     );
-  }
-}
+  },
+  child: Text("Add Column"),
+        ),
+      ],
+    ),
+  );
+}}

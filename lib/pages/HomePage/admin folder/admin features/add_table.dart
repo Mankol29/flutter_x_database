@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/HomePage/admin%20folder/admin%20features/table_column.dart';
@@ -27,37 +27,40 @@ class _CreateTableScreenState extends State<CreateTableScreen> {
     }
   });
 }
-  Future<void> createTableInDatabase(String tableName, List<TableColumn> columns) async {
-  final url = Uri.parse("http://10.0.2.2/rest_api/create_table.php"); // Zmie? na w?a?ciwy URL
-  final headers = {"Content-Type": "application/json"};
-  
-  final columnData = columns.map((col) => {"name": col.name, "type": col.type}).toList();
-
-  final data = {
-    "table_name": tableName,
-    "columns": columnData,
-  };
-
-  final response = await http.post(url, headers: headers, body: jsonEncode(data));
-
-  if (response.statusCode == 200) {
-    // Tutaj mo?esz obs?u?y? odpowied? serwera po utworzeniu tabeli
-    print("Table created successfully!");
-  } else {
-    // Obs?u? b??d, je?li wyst?pi?
-    print("Error creating table: ${response.statusCode}");
-  }
-}
-
-
   void createTable() {
   String tableName = tableNameController.text;
-  if (tableName.isNotEmpty && columns.isNotEmpty) {
-    createTableInDatabase(tableName, columns);
+  int numColumns = columns.length;
+
+  if (tableName.isNotEmpty && numColumns > 0) {
+    createTableInDatabase(tableName, numColumns, columns);
 
     // Reset controllers and columns list after creating the table
     tableNameController.clear();
     columns.clear();
+  }
+}
+
+Future<void> createTableInDatabase(
+    String tableName, int numColumns, List<TableColumn> columns) async {
+  final url = Uri.parse("http://10.0.2.2/rest_api/create_table.php");
+  final headers = {"Content-Type": "application/x-www-form-urlencoded"};
+
+  final Map<String, String> data = {
+    "table_name": tableName,
+    "column_count": numColumns.toString(),
+  };
+
+  for (int i = 0; i < numColumns; i++) {
+    data["column_name_$i"] = columns[i].name;
+    data["column_type_$i"] = columns[i].type;
+  }
+
+  final response = await http.post(url, headers: headers, body: data);
+
+  if (response.statusCode == 200) {
+    print("Table created successfully!");
+  } else {
+    print("Error creating table: ${response.statusCode}");
   }
 }
 

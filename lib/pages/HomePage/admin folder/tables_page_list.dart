@@ -89,7 +89,6 @@ class _TableListPageState extends State<TableListPage> {
         Icon(Icons.pivot_table_chart_sharp),
         ],
         )
-        ),
-        );
+        ),);
 }
   }
