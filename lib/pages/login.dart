@@ -5,7 +5,7 @@ import 'package:flutter_x_database/pages/sign.dart';
 import 'components/container_text_field.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'HomePage/home_page.dart';
+import 'HomePage/home_page_gnav.dart';
 
 class Login extends StatefulWidget {
   const Login({
@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage(userRole: userRole)),
+            MaterialPageRoute(builder: (context) => HomePageGnav(userRole: userRole)),
           );
         } else {
           print("Invalid login or password");
