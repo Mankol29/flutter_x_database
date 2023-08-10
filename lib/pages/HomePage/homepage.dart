@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+<<<<<<< HEAD
 import '../components/EditUserPage.dart';
 import '../components/UserRoleAdd.dart';
 import '../login.dart';
@@ -7,6 +8,15 @@ import 'adminFolder/adminFeatures/add_users_container.dart';
 import 'adminFolder/adminFeatures/edit_users_container.dart';
 import 'adminFolder/adminFeatures/show_table.dart';
 import 'adminFolder/tables_page_list.dart';
+=======
+import '../admin folder/EditUserPage.dart';
+import '../admin folder/UserRoleAdd.dart';
+import '../login.dart';
+import 'admin folder/admin features/add_users_container.dart';
+import 'admin folder/admin features/edit_users_container.dart';
+import 'admin folder/admin features/show_table.dart';
+import 'admin folder/tables_page_list.dart';
+>>>>>>> a5b91d9ee5115846dc149f10e06d36d56be8e482
 
 class HomePage extends StatelessWidget {
 

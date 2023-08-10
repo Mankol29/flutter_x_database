@@ -1,8 +1,15 @@
+<<<<<<< HEAD:lib/pages/HomePage/adminFolder/adminFeatures/add_table.dart
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../../adminFolder/adminFeatures/table_column.dart';
+=======
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:flutter_x_database/pages/HomePage/admin%20folder/admin%20features/table_column.dart';
+>>>>>>> a5b91d9ee5115846dc149f10e06d36d56be8e482:lib/pages/HomePage/admin folder/admin features/add_table.dart
 
 class CreateTableScreen extends StatefulWidget {
   @override
@@ -28,12 +35,42 @@ class _CreateTableScreenState extends State<CreateTableScreen> {
     }
   });
 }
+<<<<<<< HEAD:lib/pages/HomePage/adminFolder/adminFeatures/add_table.dart
   void createTable() {
   String tableName = tableNameController.text;
   int numColumns = columns.length;
 
   if (tableName.isNotEmpty && numColumns > 0) {
     createTableInDatabase(tableName, numColumns, columns);
+=======
+  Future<void> createTableInDatabase(String tableName, List<TableColumn> columns) async {
+  final url = Uri.parse("http://10.0.2.2/rest_api/create_table.php"); // Zmie? na w?a?ciwy URL
+  final headers = {"Content-Type": "application/json"};
+  
+  final columnData = columns.map((col) => {"name": col.name, "type": col.type}).toList();
+
+  final data = {
+    "table_name": tableName,
+    "columns": columnData,
+  };
+
+  final response = await http.post(url, headers: headers, body: jsonEncode(data));
+
+  if (response.statusCode == 200) {
+    // Tutaj mo?esz obs?u?y? odpowied? serwera po utworzeniu tabeli
+    print("Table created successfully!");
+  } else {
+    // Obs?u? b??d, je?li wyst?pi?
+    print("Error creating table: ${response.statusCode}");
+  }
+}
+
+
+  void createTable() {
+  String tableName = tableNameController.text;
+  if (tableName.isNotEmpty && columns.isNotEmpty) {
+    createTableInDatabase(tableName, columns);
+>>>>>>> a5b91d9ee5115846dc149f10e06d36d56be8e482:lib/pages/HomePage/admin folder/admin features/add_table.dart
 
     // Reset controllers and columns list after creating the table
     tableNameController.clear();
@@ -41,6 +78,7 @@ class _CreateTableScreenState extends State<CreateTableScreen> {
   }
 }
 
+<<<<<<< HEAD:lib/pages/HomePage/adminFolder/adminFeatures/add_table.dart
 Future<void> createTableInDatabase(
     String tableName, int numColumns, List<TableColumn> columns) async {
   final url = Uri.parse("http://10.0.2.2/rest_api/create_table.php");
@@ -65,6 +103,8 @@ Future<void> createTableInDatabase(
   }
 }
 
+=======
+>>>>>>> a5b91d9ee5115846dc149f10e06d36d56be8e482:lib/pages/HomePage/admin folder/admin features/add_table.dart
 
   @override
   Widget build(BuildContext context) {
@@ -127,4 +167,8 @@ Future<void> createTableInDatabase(
       ),
     );
   }
+<<<<<<< HEAD:lib/pages/HomePage/adminFolder/adminFeatures/add_table.dart
 }
+=======
+}
+>>>>>>> a5b91d9ee5115846dc149f10e06d36d56be8e482:lib/pages/HomePage/admin folder/admin features/add_table.dart
