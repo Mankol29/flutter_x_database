@@ -14,7 +14,7 @@ class TableDetailsPage extends StatefulWidget {
 
 class _TableDetailsPageState extends State<TableDetailsPage> {
   String selectedRole = "Administrator";
-  String selectedGender = "Mezczyzna"; // Dodaj deklaracj? selectedGender
+  String selectedGender = "Mezczyzna"; // Dodaj deklaracje selectedGender
   List<String> columns = [];
   List<Map<String, dynamic>> tableData = [];
 
@@ -132,32 +132,57 @@ class _TableDetailsPageState extends State<TableDetailsPage> {
           },
         );
         } else {
-          // Wy?wietl dialog z polami do wprowadzenia nowych danych
-          final TextEditingController _controller = TextEditingController();
-          enteredValue = await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Enter $col"),
-                content:
-                    TextField(controller: _controller), // Ustaw kontroler dla pola tekstowego
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(null),
-                    child: Text("Cancel"),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enteredValue = _controller.text;
-                      Navigator.of(context).pop(enteredValue);
-                    },
-                    child: Text("Add"),
-                  ),
-                ],
-              );
-            },
+  // Wyswietl dialog z polem tekstowym do wprowadzenia nowych danych
+  final TextEditingController _controller = TextEditingController();
+  String errorText = ""; // Tekst b??du
+
+  enteredValue = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text("Enter $col"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _controller,
+                ),
+                SizedBox(height: 8), // Dodaj odst?p
+                Text(
+                  errorText,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(null),
+                child: Text("Cancel"),
+              ),
+              TextButton(
+                child: Text("Add"),
+                onPressed: () {
+                  enteredValue = _controller.text;
+                  if (enteredValue.isNotEmpty) {
+                    Navigator.of(context).pop(enteredValue);
+                  } else {
+                    setState(() {
+                      errorText = 'Please complete data!'; // Ustaw tekst b??du
+                    });
+                  }
+                },
+              ),
+            ],
           );
-        }
+        },
+      );
+    },
+  );
+}
+
+
 
         if (enteredValue != null && enteredValue != "") {
           newData[col] = enteredValue;

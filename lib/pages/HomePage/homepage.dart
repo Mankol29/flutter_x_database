@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_x_database/pages/HomePage/homepage%20components/EditUserPage.dart';
-import 'package:flutter_x_database/pages/HomePage/homepage%20components/UserRoleAdd.dart';
-import 'package:flutter_x_database/pages/login.dart';
 
+import '../admin folder/EditUserPage.dart';
+import '../admin folder/UserRoleAdd.dart';
+import '../login.dart';
 import 'admin folder/admin features/add_users_container.dart';
 import 'admin folder/admin features/edit_users_container.dart';
 import 'admin folder/admin features/show_table.dart';
 import 'admin folder/tables_page_list.dart';
 
 class HomePage extends StatelessWidget {
-  final String userRole; // Dodaj pole userRole w konstruktorze
 
-  const HomePage({required this.userRole, Key? key}) : super(key: key);
+   final String userRole; // Dodaj pole userRole w konstruktorze
+
+  const HomePage({super.key, required this.userRole});
 
   @override
   Widget build(BuildContext context) {
@@ -67,27 +68,21 @@ class HomePage extends StatelessWidget {
               if(userRole != "Administrator") // = zwykly uzytkownik
               const Center(child: Text("Ten tekst jest widoczny dla zwyklych uzytkownikow"),),
 
-
+              if(userRole == "Administrator")
               GestureDetector(
                  onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>  TableListPage()),
                 ),
-                child: const Column(
-                  children: [
-                     Padding(
-                      padding: EdgeInsets.only(top:20.0, left: 8,right: 8),
-                      child: ShowTable(),
+                child:
+                const Padding(
+                 padding: EdgeInsets.only(top:20.0, left: 8,right: 8),
+                 child: ShowTable(),
                     ),
-            
-          ],
-        ),
       ),],
         ),
       ));
   }
 }
-
-
 
 
