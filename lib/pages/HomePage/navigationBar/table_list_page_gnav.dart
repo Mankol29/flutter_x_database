@@ -1,25 +1,18 @@
 // ignore_for_file: library_private_types_in_public_api, avoid_print
 
-import 'package:flutter/material.dart';
-import 'package:flutter_x_database/pages/components/table_column.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class TableListPage extends StatefulWidget {
-  const TableListPage({super.key});
+class TableListPageGnav extends StatefulWidget {
+  const TableListPageGnav({Key? key}) : super(key: key);
 
   @override
-  _TableListPageState createState() => _TableListPageState();
+  _TableListPageGnavState createState() => _TableListPageGnavState();
 }
 
-class _TableListPageState extends State<TableListPage> {
+class _TableListPageGnavState extends State<TableListPageGnav> {
   List<String> tableNames = [];
-  List<TableColumn> newColumns = [];
-  List<TableColumn> newTableColumns = [];
-
-  Future<void> _refreshTableNames() async {
-    await fetchTableNames(); // Od?wie? list? tabel
-  }
 
   @override
   void initState() {
@@ -44,7 +37,6 @@ class _TableListPageState extends State<TableListPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,49 +44,37 @@ class _TableListPageState extends State<TableListPage> {
         title: const Text("Table List"),
         centerTitle: true,
       ),
-       body: RefreshIndicator(
-        onRefresh: _refreshTableNames, // Funkcja do od?wie?ania
-        child: ListView.builder(
-          itemCount: tableNames.length,
-          itemBuilder: (context, index) {
-            return ListTile(
+      body: ListView.builder(
+        itemCount: tableNames.length,
+        itemBuilder: (context, index) {
+          return ListTile(
             title: Container(
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.all(8),
-              child: Center(child: Text(tableNames[index])),
+              child: Center(
+                child: Text(tableNames[index]),
+              ),
             ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TableDetailsPage(tableName: tableNames[index]),
+                  builder: (context) =>
+                      TableDetailsPage(tableName: tableNames[index]),
                 ),
               );
             },
           );
         },
       ),
-      
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:(){
-           Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>const CreateTableScreen(),),);
-        },
-        child: const Stack(
-          children: [
-        Icon(Icons.pivot_table_chart_sharp),
-        ],
-        )
-        ),);
-}
+    );
   }
-  class TableDetailsPage extends StatefulWidget {
+}
+
+class TableDetailsPage extends StatefulWidget {
   final String tableName;
 
   const TableDetailsPage({required this.tableName, Key? key, }) : super(key: key);
@@ -104,7 +84,6 @@ class _TableListPageState extends State<TableListPage> {
 }
 
 class _TableDetailsPageState extends State<TableDetailsPage> {
-
   String selectedRole = "Administrator";
   String selectedGender = "Mezczyzna"; // Dodaj deklaracje selectedGender
   List<String> columns = [];
@@ -485,132 +464,3 @@ ElevatedButton(
     ),
   );
 }}
-
-
-
-class CreateTableScreen extends StatefulWidget {
-  const CreateTableScreen({super.key});
-
-  @override
-  _CreateTableScreenState createState() => _CreateTableScreenState();
-}
-
-class _CreateTableScreenState extends State<CreateTableScreen> {
-  List<TableColumn> columns = [];
-  TextEditingController tableNameController = TextEditingController();
-  TextEditingController columnNameController = TextEditingController();
-  TextEditingController columnTypeController = TextEditingController();
-  List<String> columnTypes = ["INT", "VARCHAR(40)"];
-  String? selectedColumnType; // Domy?lnie przypisz pusty string, je?li newValue jest null
-
-  void addColumn() {
-  setState(() {
-    String columnName = columnNameController.text;
-    String columnType = selectedColumnType ?? ""; // U?yj wybranej warto?ci lub pustego stringa
-    if (columnName.isNotEmpty && columnType.isNotEmpty) {
-      columns.add(TableColumn(name: columnName, type: columnType));
-      columnNameController.clear();
-      selectedColumnType = null; // Zresetuj wybór typu kolumny
-    }
-  });
-}
-  void createTable() {
-  String tableName = tableNameController.text;
-  int numColumns = columns.length;
-
-  if (tableName.isNotEmpty && numColumns > 0) {
-    createTableInDatabase(tableName, numColumns, columns);
-
-    // Reset controllers and columns list after creating the table
-    tableNameController.clear();
-    columns.clear();
-  }
-}
-
-Future<void> createTableInDatabase(
-    String tableName, int numColumns, List<TableColumn> columns) async {
-  final url = Uri.parse("http://10.0.2.2/rest_api/create_table.php");
-  final headers = {"Content-Type": "application/x-www-form-urlencoded"};
-
-  final Map<String, String> data = {
-    "table_name": tableName,
-    "column_count": numColumns.toString(),
-  };
-
-  for (int i = 0; i < numColumns; i++) {
-    data["column_name_$i"] = columns[i].name;
-    data["column_type_$i"] = columns[i].type;
-  }
-
-  final response = await http.post(url, headers: headers, body: data);
-
-  if (response.statusCode == 200) {
-    print("Table created successfully!");
-  } else {
-    print("Error creating table: ${response.statusCode}");
-  }
-}
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Create Table"),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: tableNameController,
-              decoration: const InputDecoration(labelText: "Table Name"),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: columnNameController,
-              decoration: const InputDecoration(labelText: "Column Name"),
-            ),
-            const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: selectedColumnType,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedColumnType = newValue;
-                });
-              },
-              items: columnTypes.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              decoration: const InputDecoration(labelText: "Column Type"),
-            ),
-            ElevatedButton(
-              onPressed: addColumn,
-              child: const Text("Add Column"),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: columns.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text("${columns[index].name} - ${columns[index].type}"),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: createTable,
-        child: const Icon(Icons.check),
-      ),
-    );
-  }
-}

@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 
 class alertLogin extends StatelessWidget {
@@ -25,12 +27,12 @@ class alertLogin extends StatelessWidget {
     ],
     title:  Text(
       errorTitle,
-      style: TextStyle(
+      style: const TextStyle(
         fontWeight: FontWeight.bold,
       ),
     ),
     content: Text(errorName,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 20,
       ),
     ),

@@ -1,8 +1,12 @@
+// ignore_for_file: file_names, avoid_print, use_build_context_synchronously
+
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'adminFeatures/admin_text_field.dart';
-import 'adminFeatures/alert_login_exists.dart';
+
+import '../pages/components/admin_text_field.dart';
+import '../pages/components/alert_login_exists.dart';
 
 class UserRoleAdd extends StatefulWidget {
   const UserRoleAdd({super.key});
@@ -45,7 +49,7 @@ Future<void> saveAddRole() async {
 
         showDialog(
           context: context,
-            builder: (context) => alertLogin(
+            builder: (context) => const alertLogin(
               errorTitle: "Done!",
               errorName: "Nice! You've add a new user",
             ));
@@ -58,7 +62,7 @@ Future<void> saveAddRole() async {
 
           showDialog(
           context: context,
-            builder: (context) => alertLogin(
+            builder: (context) => const alertLogin(
               errorTitle: "You encountered a problem",
               errorName: "Your login is already existing.",
             ));
@@ -69,7 +73,7 @@ Future<void> saveAddRole() async {
 
           showDialog(
           context: context,
-            builder: (context) => alertLogin(
+            builder: (context) => const alertLogin(
               errorTitle: "You encountered a problem",
               errorName: "You have error with adding user role",
             ));
@@ -93,7 +97,7 @@ Future<void> saveAddRole() async {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add user account as Admin"),
+        title: const Text("Add user account as Admin"),
       ),
       body: Column(
        children:[ 
@@ -136,7 +140,7 @@ Future<void> saveAddRole() async {
           ),
         ),
         ElevatedButton(
-        child: Text("Save user"),
+        child: const Text("Save user"),
         onPressed: () {
           saveAddRole();
           pass.clear();

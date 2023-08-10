@@ -3,7 +3,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../adminFolder/adminFeatures/user_data.dart';
+
+import '../pages/components/user_data.dart';
 
 class EditUserPage extends StatefulWidget {
   @override
@@ -46,7 +47,7 @@ class _EditUserPageState extends State<EditUserPage> {
     super.dispose();
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Edit Users")),
@@ -56,74 +57,17 @@ class _EditUserPageState extends State<EditUserPage> {
           return ListTile(
             title: Text(userDataList[index].login),
             subtitle: Text(userDataList[index].role),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    _showEditDialog(userDataList[index]);
-                  },
-                  icon: Icon(Icons.edit),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _showDeleteConfirmationDialog(userDataList[index]);
-                  },
-                  icon: Icon(Icons.delete),
-                ),
-              ],
+            trailing: ElevatedButton(
+              onPressed: () {
+                // Open edit dialog when button is pressed
+                _showEditDialog(userDataList[index]);
+              },
+              child: const Text("Edit"),
             ),
           );
         },
       ),
     );
-  }
-  Future<void> _showDeleteConfirmationDialog(UserData userData) async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Delete User: ${userData.login}"),
-          content: Text("Are you sure you want to delete this user?"),
-          actions: [
-            ElevatedButton(
-              onPressed: () async {
-                await _deleteUserData(userData);
-                Navigator.of(context).pop();
-              },
-              child: Text("Delete"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Cancel"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
- Future<void> _deleteUserData(UserData userData) async {
-    try {
-      final response = await http.post(
-        Uri.parse("http://10.0.2.2/rest_api/delete_user.php"),
-        body: {
-          "id": userData.id.toString(),
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("User data deleted successfully");
-        fetchUserData(); // Refresh user data after deletion
-      } else {
-        print("Error deleting user data");
-      }
-    } catch (e) {
-      print("An error occurred: $e");
-    }
   }
 
   Future<void> _showEditDialog(UserData userData) async {

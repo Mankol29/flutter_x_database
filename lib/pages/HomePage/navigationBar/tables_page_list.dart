@@ -1,9 +1,104 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_print
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-class TableDetailsPage extends StatefulWidget {
+import 'package:flutter_x_database/pages/components/table_column.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+
+class TableListPage extends StatefulWidget {
+  const TableListPage({super.key});
+
+  @override
+  _TableListPageState createState() => _TableListPageState();
+}
+
+class _TableListPageState extends State<TableListPage> {
+  List<String> tableNames = [];
+  List<TableColumn> newColumns = [];
+  List<TableColumn> newTableColumns = [];
+
+  Future<void> _refreshTableNames() async {
+    await fetchTableNames(); // Od?wie? list? tabel
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTableNames();
+  }
+
+  Future<void> fetchTableNames() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://10.0.2.2/rest_api/fetch_table_names.php"),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = json.decode(response.body);
+        setState(() {
+          tableNames = List.from(responseData);
+        });
+      }
+    } catch (e) {
+      print("An error occurred: $e");
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Table List"),
+        centerTitle: true,
+      ),
+       body: RefreshIndicator(
+        onRefresh: _refreshTableNames, // Funkcja do od?wie?ania
+        child: ListView.builder(
+          itemCount: tableNames.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+            title: Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Center(child: Text(tableNames[index])),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TableDetailsPage(tableName: tableNames[index]),
+                ),
+              );
+            },
+          );
+        },
+      ),
+      
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed:(){
+           Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>const CreateTableScreen(),),);
+        },
+        child: const Stack(
+          children: [
+        Icon(Icons.pivot_table_chart_sharp),
+        ],
+        )
+        ),);
+}
+  }
+
+ 
+  class TableDetailsPage extends StatefulWidget {
   final String tableName;
 
   const TableDetailsPage({required this.tableName, Key? key, }) : super(key: key);
@@ -13,6 +108,7 @@ class TableDetailsPage extends StatefulWidget {
 }
 
 class _TableDetailsPageState extends State<TableDetailsPage> {
+
   String selectedRole = "Administrator";
   String selectedGender = "Mezczyzna"; // Dodaj deklaracje selectedGender
   List<String> columns = [];
@@ -29,23 +125,6 @@ class _TableDetailsPageState extends State<TableDetailsPage> {
     fetchTableData();
   }
 
- Future<String> _getUserRoleFromServer(String login) async {
-  try {
-    String uri = "http://10.0.2.2/rest_api/get_user_role.php?login=$login";
-    var res = await http.get(Uri.parse(uri));
-
-    if (res.statusCode == 200) {
-      var response = jsonDecode(res.body);
-      return response["role"];
-    } else {
-      print("Error getting user role");
-      return "";
-    }
-  } catch (e) {
-    print("An error occurred: $e");
-    return "";
-  }
-}
 
 
 Future<void> _addColumn() async {
@@ -64,7 +143,7 @@ Future<void> _addColumn() async {
       if (responseData.containsKey("message")) {
         // Wyswietl komunikat o sukcesie
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Column added successfully")),
+          const SnackBar(content: Text("Column added successfully")),
         );
         // Od?wie? dane
         fetchTableData();
@@ -116,11 +195,11 @@ Future<void> _addColumn() async {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(null),
-            child: Text("Cancel"),
+            child: const Text("Cancel"),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(tempSelectedRole),
-            child: Text("Add"),
+            child: const Text("Add"),
           ),
         ],
       );
@@ -156,11 +235,11 @@ Future<void> _addColumn() async {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(null),
-                  child: Text("Cancel"),
+                  child: const Text("Cancel"),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(tempSelectedGender),
-                  child: Text("Add"),
+                  child: const Text("Add"),
                 ),
               ],
             );
@@ -168,7 +247,7 @@ Future<void> _addColumn() async {
         );
         } else {
   // Wyswietl dialog z polem tekstowym do wprowadzenia nowych danych
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
   String errorText = ""; // Tekst b??du
 
   enteredValue = await showDialog(
@@ -182,24 +261,24 @@ Future<void> _addColumn() async {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller: _controller,
+                  controller: controller,
                 ),
-                SizedBox(height: 8), // Dodaj odst?p
+                const SizedBox(height: 8), // Dodaj odst?p
                 Text(
                   errorText,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(null),
-                child: Text("Cancel"),
+                child: const Text("Cancel"),
               ),
               TextButton(
-                child: Text("Add"),
+                child: const Text("Add"),
                 onPressed: () {
-                  enteredValue = _controller.text;
+                  enteredValue = controller.text;
                   if (enteredValue.isNotEmpty) {
                     Navigator.of(context).pop(enteredValue);
                   } else {
@@ -241,7 +320,7 @@ Future<void> _addColumn() async {
         if (responseData.containsKey("message")) {
           // Wyswietl komunikat o sukcesie
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Data inserted successfully")),
+            const SnackBar(content: Text("Data inserted successfully")),
           );
           // Od?wie? dane
           fetchTableData();
@@ -272,7 +351,7 @@ Future<void> _deleteRecord(String recordId) async {
       if (responseData.containsKey("message")) {
         // Wyswietl komunikat o sukcesie
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Record deleted successfully")),
+          const SnackBar(content: Text("Record deleted successfully")),
         );
         // Od?wie? dane
         fetchTableData();
@@ -329,7 +408,7 @@ Future<void> _deleteRecord(String recordId) async {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () {
               _deleteRecord(row["id"]); // Wywo?aj funkcj? usuwania rekordu
             },
@@ -344,9 +423,9 @@ Future<void> _deleteRecord(String recordId) async {
       children: [
         ElevatedButton(
           onPressed: _insertData,
-          child: Text("Add Data"),
+          child: const Text("Add Data"),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
 
 ElevatedButton(
   onPressed: () {
@@ -354,7 +433,7 @@ ElevatedButton(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Add Column"),
+          title: const Text("Add Column"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -364,9 +443,9 @@ ElevatedButton(
                     newColumnName = value;
                   });
                 },
-                decoration: InputDecoration(labelText: "Column Name"),
+                decoration: const InputDecoration(labelText: "Column Name"),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 value: newColumnType.isNotEmpty ? newColumnType : columnTypes[0], // Ustaw domy?ln? warto?? z listy
                 onChanged: (newValue) {
@@ -382,7 +461,7 @@ ElevatedButton(
                     );
                   },
                 ).toList(),
-                decoration: InputDecoration(labelText: "Column Type"),
+                decoration: const InputDecoration(labelText: "Column Type"),
               ),
             ],
           ),
@@ -391,22 +470,149 @@ ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () {
                 _addColumn(); // Dodaj now? kolumn?
               },
-              child: Text("Add Column"),
+              child: const Text("Add Column"),
             ),
           ],
         );
       },
     );
   },
-  child: Text("Add Column"),
+  child: const Text("Add Column"),
         ),
       ],
     ),
   );
 }}
+
+  class CreateTableScreen extends StatefulWidget {
+  const CreateTableScreen({super.key});
+
+  @override
+  _CreateTableScreenState createState() => _CreateTableScreenState();
+}
+
+class _CreateTableScreenState extends State<CreateTableScreen> {
+  List<TableColumn> columns = [];
+  TextEditingController tableNameController = TextEditingController();
+  TextEditingController columnNameController = TextEditingController();
+  TextEditingController columnTypeController = TextEditingController();
+  List<String> columnTypes = ["INT", "VARCHAR(40)"];
+  String? selectedColumnType; // Domy?lnie przypisz pusty string, je?li newValue jest null
+
+  void addColumn() {
+  setState(() {
+    String columnName = columnNameController.text;
+    String columnType = selectedColumnType ?? ""; // U?yj wybranej warto?ci lub pustego stringa
+    if (columnName.isNotEmpty && columnType.isNotEmpty) {
+      columns.add(TableColumn(name: columnName, type: columnType));
+      columnNameController.clear();
+      selectedColumnType = null; // Zresetuj wybór typu kolumny
+    }
+  });
+}
+  void createTable() {
+  String tableName = tableNameController.text;
+  int numColumns = columns.length;
+
+  if (tableName.isNotEmpty && numColumns > 0) {
+    createTableInDatabase(tableName, numColumns, columns);
+
+    // Reset controllers and columns list after creating the table
+    tableNameController.clear();
+    columns.clear();
+  }
+}
+
+Future<void> createTableInDatabase(
+    String tableName, int numColumns, List<TableColumn> columns) async {
+  final url = Uri.parse("http://10.0.2.2/rest_api/create_table.php");
+  final headers = {"Content-Type": "application/x-www-form-urlencoded"};
+
+  final Map<String, String> data = {
+    "table_name": tableName,
+    "column_count": numColumns.toString(),
+  };
+
+  for (int i = 0; i < numColumns; i++) {
+    data["column_name_$i"] = columns[i].name;
+    data["column_type_$i"] = columns[i].type;
+  }
+
+  final response = await http.post(url, headers: headers, body: data);
+
+  if (response.statusCode == 200) {
+    print("Table created successfully!");
+  } else {
+    print("Error creating table: ${response.statusCode}");
+  }
+}
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Create Table"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: tableNameController,
+              decoration: const InputDecoration(labelText: "Table Name"),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: columnNameController,
+              decoration: const InputDecoration(labelText: "Column Name"),
+            ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: selectedColumnType,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedColumnType = newValue;
+                });
+              },
+              items: columnTypes.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              decoration: const InputDecoration(labelText: "Column Type"),
+            ),
+            ElevatedButton(
+              onPressed: addColumn,
+              child: const Text("Add Column"),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: columns.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text("${columns[index].name} - ${columns[index].type}"),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createTable,
+        child: const Icon(Icons.check),
+      ),
+    );
+  }
+}

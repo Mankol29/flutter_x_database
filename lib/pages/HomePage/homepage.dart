@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../components/EditUserPage.dart';
-import '../components/UserRoleAdd.dart';
+import '../../EditFiles/EditUserPage.dart';
+import '../../addFiles/UserRoleAdd.dart';
 import '../login.dart';
-import 'adminFolder/adminFeatures/add_users_container.dart';
-import 'adminFolder/adminFeatures/edit_users_container.dart';
-import 'adminFolder/adminFeatures/show_table.dart';
+import '../../addFiles/add_users_container.dart';
+import '../../EditFiles/edit_users_container.dart';
+import 'show_table.dart';
 import 'adminFolder/tables_page_list.dart';
 
 class HomePage extends StatelessWidget {
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Page"),
+        title: const Text("Home Page"),
         centerTitle: true,
         automaticallyImplyLeading: false,
        actions: [
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
                 (Route<dynamic> route) => false,
               );
             },
-            icon: Icon(Icons.logout), // Ikona przycisku "Wyloguj"
+            icon: const Icon(Icons.logout), // Ikona przycisku "Wyloguj"
           ),
         ],
       ),
@@ -72,7 +72,7 @@ class HomePage extends StatelessWidget {
               GestureDetector(
                  onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>  TableListPage()),
+                  MaterialPageRoute(builder: (context) =>  const TableListPage()),
                 ),
                 child:
                 const Padding(

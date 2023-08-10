@@ -1,10 +1,14 @@
 
-import 'package:flutter_x_database/pages/HomePage/adminFolder/adminFeatures/table_column.dart';
+// ignore_for_file: library_private_types_in_public_api, avoid_print
+
+import 'package:flutter_x_database/pages/components/table_column.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 
 class CreateTableScreen extends StatefulWidget {
+  const CreateTableScreen({super.key});
+
   @override
   _CreateTableScreenState createState() => _CreateTableScreenState();
 }
@@ -70,7 +74,7 @@ Future<void> createTableInDatabase(
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Table"),
+        title: const Text("Create Table"),
         centerTitle: true,
       ),
       body: Padding(
@@ -80,14 +84,14 @@ Future<void> createTableInDatabase(
           children: [
             TextField(
               controller: tableNameController,
-              decoration: InputDecoration(labelText: "Table Name"),
+              decoration: const InputDecoration(labelText: "Table Name"),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: columnNameController,
-              decoration: InputDecoration(labelText: "Column Name"),
+              decoration: const InputDecoration(labelText: "Column Name"),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             DropdownButtonFormField<String>(
               value: selectedColumnType,
               onChanged: (newValue) {
@@ -101,13 +105,13 @@ Future<void> createTableInDatabase(
                   child: Text(value),
                 );
               }).toList(),
-              decoration: InputDecoration(labelText: "Column Type"),
+              decoration: const InputDecoration(labelText: "Column Type"),
             ),
             ElevatedButton(
               onPressed: addColumn,
-              child: Text("Add Column"),
+              child: const Text("Add Column"),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: columns.length,
@@ -123,7 +127,7 @@ Future<void> createTableInDatabase(
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: createTable,
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }

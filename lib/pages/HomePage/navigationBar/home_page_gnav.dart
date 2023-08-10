@@ -1,7 +1,9 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/HomePage/homepage.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'adminFolder/adminFeatures/table_list_page_gnav.dart';
+import 'table_list_page_gnav.dart';
 
 
 
@@ -24,19 +26,14 @@ class _HomePageGnavState extends State<HomePageGnav> {
     userRole = widget.userRole;
   }
 
-  void _navigateGnav(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       HomePage(userRole: userRole),
-      TableListPageGnav(),
-      Center(child: Text("Here will be search page")),
-      Center(child: Text("Here will be settings page")),
+      const TableListPageGnav(),
+      const Center(child: Text("Here will be search page")),
+      const Center(child: Text("Here will be settings page")),
     ];
 
     return Scaffold(
@@ -48,14 +45,14 @@ class _HomePageGnavState extends State<HomePageGnav> {
         activeColor: Colors.black,
         tabBackgroundColor: Colors.purpleAccent,
         curve: Curves.easeOut,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         onTabChange: (index) {
           setState(() {
             _selectedIndex = index;
           });
           print(index);
         },
-        tabs: [
+        tabs: const [
           GButton(
             icon: Icons.home,
             text: "Home",
