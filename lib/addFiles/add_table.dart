@@ -74,6 +74,7 @@ Future<void> createTableInDatabase(
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: const Text("Create Table"),
         centerTitle: true,
       ),

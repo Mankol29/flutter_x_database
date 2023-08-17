@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/HomePage/navigationBar/tables_page_list.dart';
-
 import 'package:flutter_x_database/EditFiles/EditUserPage.dart';
 import 'package:flutter_x_database/addFiles/UserRoleAdd.dart';
 import 'package:flutter_x_database/pages/login.dart';
@@ -18,6 +17,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: const Text("Home Page"),
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
                 (Route<dynamic> route) => false,
               );
             },
-            icon: const Icon(Icons.logout), // Ikona przycisku "Wyloguj"
+            icon: const Icon(Icons.logout),color: Colors.black, // Ikona przycisku "Wyloguj"
           ),
         ],
       ),

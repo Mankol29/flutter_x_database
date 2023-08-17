@@ -97,6 +97,7 @@ Future<void> saveAddRole() async {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: const Text("Add user account as Admin"),
       ),
       body: Column(

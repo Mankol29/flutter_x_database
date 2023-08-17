@@ -296,6 +296,7 @@ Future<void> _deleteRecord(String recordId) async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: Text(widget.tableName),
       ),
       body:ListView.builder(

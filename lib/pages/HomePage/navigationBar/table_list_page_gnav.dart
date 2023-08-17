@@ -41,6 +41,8 @@ class _TableListPageGnavState extends State<TableListPageGnav> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
+        automaticallyImplyLeading: false,
         title: const Text("Table List"),
         centerTitle: true,
       ),

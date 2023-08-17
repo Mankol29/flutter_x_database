@@ -50,7 +50,9 @@ class _EditUserPageState extends State<EditUserPage> {
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit Users")),
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: const Text("Edit Users")),
       body: ListView.builder(
         itemCount: userDataList.length,
         itemBuilder: (context, index) {

@@ -38,6 +38,11 @@ class _HomePageGnavState extends State<HomePageGnav> {
     ];
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Search Page"),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.purple,),
       body: _pages[_selectedIndex],
       bottomNavigationBar: GNav(
         gap: 15,

@@ -51,6 +51,7 @@ class _TableListPageState extends State<TableListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: const Text("Table List"),
         centerTitle: true,
       ),
