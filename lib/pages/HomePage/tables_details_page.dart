@@ -35,30 +35,30 @@ class _TableDetailsPageState extends State<TableDetailsPage> {
 
 Future<void> _addColumn() async {
   try {
+    print("newColumnType before http post: $newColumnType"); // Dodaj ten print
     final response = await http.post(
-  Uri.parse("http://10.0.2.2/rest_api/add_column.php"),
-  body: {
-    "table_name": widget.tableName,
-    "column_name": newColumnName,
-    "column_type": newColumnType, // Na przyk?ad "INT" lub "VARCHAR(40)"
-  },
-);
+      Uri.parse("http://10.0.2.2/rest_api/add_column.php"),
+      body: {
+        "table_name": widget.tableName,
+        "column_name": newColumnName,
+        "column_type": newColumnType,
+      },
+    );
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData.containsKey("message")) {
-        // Wyswietl komunikat o sukcesie
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Column added successfully")),
         );
-        // Od?wie? dane
         fetchTableData();
       } else if (responseData.containsKey("error")) {
-        // Wyswietl komunikat o b??dzie
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(responseData["error"])),
         );
       }
+    } else {
+      throw Exception("Failed to add column: ${response.reasonPhrase}");
     }
   } catch (e) {
     print("An error occurred: $e");

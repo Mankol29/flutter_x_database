@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_x_database/pages/HomePage/navigationBar/tables_page_list.dart';
 
-import '../../EditFiles/EditUserPage.dart';
-import '../../addFiles/UserRoleAdd.dart';
-import '../login.dart';
-import '../../addFiles/add_users_container.dart';
-import '../../EditFiles/edit_users_container.dart';
-import 'show_table.dart';
-import 'adminFolder/tables_page_list.dart';
+import 'package:flutter_x_database/EditFiles/EditUserPage.dart';
+import 'package:flutter_x_database/addFiles/UserRoleAdd.dart';
+import 'package:flutter_x_database/pages/login.dart';
+import 'package:flutter_x_database/addFiles/add_users_container.dart';
+import 'package:flutter_x_database/EditFiles/edit_users_container.dart';
+import 'package:flutter_x_database/pages/HomePage/show_table.dart';
 
 class HomePage extends StatelessWidget {
 

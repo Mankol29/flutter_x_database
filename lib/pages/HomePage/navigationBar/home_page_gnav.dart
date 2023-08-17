@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_x_database/pages/HomePage/homepage.dart';
+import 'package:flutter_x_database/pages/HomePage/navigationBar/table_list_page_gnav.dart';
+import 'package:flutter_x_database/pages/settingsPage/settings_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'table_list_page_gnav.dart';
 
 
 
@@ -33,7 +34,7 @@ class _HomePageGnavState extends State<HomePageGnav> {
       HomePage(userRole: userRole),
       const TableListPageGnav(),
       const Center(child: Text("Here will be search page")),
-      const Center(child: Text("Here will be settings page")),
+      SettingsPage(),
     ];
 
     return Scaffold(
